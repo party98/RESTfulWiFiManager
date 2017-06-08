@@ -10,8 +10,8 @@
    Licensed under MIT license
  **************************************************************/
 
-#ifndef WiFiManager_h
-#define WiFiManager_h
+#ifndef RESTFulWiFiManager_h
+#define RESTFulWiFiManager_h
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>

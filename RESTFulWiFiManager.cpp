@@ -10,7 +10,7 @@
    Licensed under MIT license
  **************************************************************/
 
-#include "WiFiManager.h"
+#include "RESTFulWiFiManager.h"
 
 WiFiManagerParameter::WiFiManagerParameter(const char *custom) {
   _id = NULL;
@@ -124,7 +124,7 @@ void WiFiManager::setupConfigPortal() {
   server->on("/i", std::bind(&WiFiManager::handleInfo, this));
   server->on("/r", std::bind(&WiFiManager::handleReset, this));
   //server->on("/generate_204", std::bind(&WiFiManager::handle204, this));  //Android/Chrome OS captive portal check.
-  server->on("/fwlink", std::bind(&WiFiManager::handleRoot, this));  //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
+  //server->on("/fwlink", std::bind(&WiFiManager::handleRoot, this));  //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
   server->onNotFound (std::bind(&WiFiManager::handleNotFound, this));
   server->begin(); // Web server start
   DEBUG_WM(F("HTTP server started"));
@@ -615,38 +615,46 @@ void WiFiManager::handleWifiSave() {
 void WiFiManager::handleInfo() {
   DEBUG_WM(F("Info"));
 
-  String page = FPSTR(HTTP_HEAD);
-  page.replace("{v}", "Info");
-  page += FPSTR(HTTP_SCRIPT);
-  page += FPSTR(HTTP_STYLE);
-  page += _customHeadElement;
-  page += FPSTR(HTTP_HEAD_END);
-  page += F("<dl>");
-  page += F("<dt>Chip ID</dt><dd>");
+  String page = "";
+  page += F("{");
+  page += F("\n    \"Chip ID\":");
+  page += F("\"");
   page += ESP.getChipId();
-  page += F("</dd>");
-  page += F("<dt>Flash Chip ID</dt><dd>");
+  page += F("\"");
+  page += F(",\n");
+  page += F("    \"Flash Chip ID\":");
+  page += F("\"");
   page += ESP.getFlashChipId();
-  page += F("</dd>");
-  page += F("<dt>IDE Flash Size</dt><dd>");
+  page += F("\"");
+  page += F(",\n");
+  page += F("    \"IDE Flash Size\":");
+  page += F("\"");
   page += ESP.getFlashChipSize();
-  page += F(" bytes</dd>");
-  page += F("<dt>Real Flash Size</dt><dd>");
+  page += F("\"");
+  page += F(",\n");
+  page += F("    \"Real Flash Size\":");
+  page += F("\"");
   page += ESP.getFlashChipRealSize();
-  page += F(" bytes</dd>");
-  page += F("<dt>Soft AP IP</dt><dd>");
+  page += F("\"");
+  page += F(",\n");
+  page += F("    \"Soft AP IP\":");
+  page += F("\"");
   page += WiFi.softAPIP().toString();
-  page += F("</dd>");
-  page += F("<dt>Soft AP MAC</dt><dd>");
+  page += F("\"");
+  page += F(",\n");
+  page += F("    \"Soft AP MAC\":");
+  page += F("\"");
   page += WiFi.softAPmacAddress();
-  page += F("</dd>");
-  page += F("<dt>Station MAC</dt><dd>");
+  page += F("\"");
+  page += F(",\n");
+  page += F("    \"Station MAC\":");
+  page += F("\"");
   page += WiFi.macAddress();
-  page += F("</dd>");
-  page += F("</dl>");
-  page += FPSTR(HTTP_END);
+  page += F("\"");
+  page += F(",\n");
+  page += F("}");
 
-  server->send(200, "text/html", page);
+  server->send(200, "application/json", page);
 
   DEBUG_WM(F("Sent info page"));
 }
