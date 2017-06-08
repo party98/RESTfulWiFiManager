@@ -615,45 +615,14 @@ void WiFiManager::handleWifiSave() {
 void WiFiManager::handleInfo() {
   DEBUG_WM(F("Info"));
 
-  String page = "";
-  page += F("{");
-  page += F("\n    \"Chip ID\":");
-  page += F("\"");
-  page += ESP.getChipId();
-  page += F("\"");
-  page += F(",\n");
-  page += F("    \"Flash Chip ID\":");
-  page += F("\"");
-  page += ESP.getFlashChipId();
-  page += F("\"");
-  page += F(",\n");
-  page += F("    \"IDE Flash Size\":");
-  page += F("\"");
-  page += ESP.getFlashChipSize();
-  page += F("\"");
-  page += F(",\n");
-  page += F("    \"Real Flash Size\":");
-  page += F("\"");
-  page += ESP.getFlashChipRealSize();
-  page += F("\"");
-  page += F(",\n");
-  page += F("    \"Soft AP IP\":");
-  page += F("\"");
-  page += WiFi.softAPIP().toString();
-  page += F("\"");
-  page += F(",\n");
-  page += F("    \"Soft AP MAC\":");
-  page += F("\"");
-  page += WiFi.softAPmacAddress();
-  page += F("\"");
-  page += F(",\n");
-  page += F("    \"Station MAC\":");
-  page += F("\"");
-  page += WiFi.macAddress();
-  page += F("\"");
-  page += F(",\n");
-  page += F("}");
-
+  String page = FPSTR(JSON_INFO);
+  page.replace("{chip_id}",(String)ESP.getChipId());
+  page.replace("{flash_chip_id}",(String)ESP.getFlashChipId());
+  page.replace("{flash_chip_size}",(String)ESP.getFlashChipSize());
+  page.replace("{real_flash_size}",(String)ESP.getFlashChipRealSize());
+  page.replace("{IP}",WiFi.softAPIP().toString());
+  page.replace("{apMAC}",WiFi.softAPmacAddress());
+  page.replace("{MAC}",WiFi.macAddress());
   server->send(200, "application/json", page);
 
   DEBUG_WM(F("Sent info page"));
@@ -663,15 +632,8 @@ void WiFiManager::handleInfo() {
 void WiFiManager::handleReset() {
   DEBUG_WM(F("Reset"));
 
-  String page = FPSTR(HTTP_HEAD);
-  page.replace("{v}", "Info");
-  page += FPSTR(HTTP_SCRIPT);
-  page += FPSTR(HTTP_STYLE);
-  page += _customHeadElement;
-  page += FPSTR(HTTP_HEAD_END);
-  page += F("Module will reset in a few seconds.");
-  page += FPSTR(HTTP_END);
-  server->send(200, "text/html", page);
+  String page = "";
+  server->send(200, "application/json", page);
 
   DEBUG_WM(F("Sent reset page"));
   delay(5000);
