@@ -34,7 +34,7 @@ const char HTTP_FORM_END[] PROGMEM        = "<br/><button type='submit'>save</bu
 const char HTTP_SCAN_LINK[] PROGMEM       = "<br/><div class=\"c\"><a href=\"/wifi\">Scan</a></div>";
 const char HTTP_SAVED[] PROGMEM           = "<div>Credentials Saved<br />Trying to connect ESP to network.<br />If it fails reconnect to AP to try again</div>";
 const char HTTP_END[] PROGMEM             = "</div></body></html>";
-const char JSON_INFO[] PROGMEM                     = "{\n\t'ChipID':'{chip_id}',\n\t'FlashChipID':'{flash_chip_id}',\n\t'IDEFlashSize':'{flash_chip_size}',\n\t'RealFlashSize':'{real_flash_size}',\n\t'SoftAPIP':'{IP}',\n\t'SoftAPMAC':'{apMAC}',\n\t'StationMAC':'{MAC}'\n}";
+const char JSON_INFO[] PROGMEM            = "{\"ChipID\":\"{chip_id}\",\"FlashChipID\":\"{flash_chip_id}\",\"IDEFlashSize\":\"{flash_chip_size}\",\"RealFlashSize\":\"{real_flash_size}\",\"SoftAPIP\":\"{IP}\",\"SoftAPMAC\":\"{apMAC}\",\"StationMAC\":\"{MAC}\"}";
 
 #define WIFI_MANAGER_MAX_PARAMS 10
 
