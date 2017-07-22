@@ -400,7 +400,7 @@ void WiFiManager::handleRoot() {
 /** Wifi config page handler */
 void WiFiManager::handleWifi() {
 
-  bool scan = True;
+  bool scan = true;
   String page = "[";
 
   if (scan) {
@@ -476,7 +476,7 @@ void WiFiManager::handleWifi() {
       }
     }
   }
-  page.pop_back();
+  page.remove(page.length()-1);
   page += "]";
 
   
